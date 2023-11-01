@@ -1,0 +1,104 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  /* Style the header */
+  header {
+    background-color: #666;
+    padding:5px;
+    background-image:  url(WebGallery-background-header-1.png);
+    background-position: left;
+    background-position-x: 20%;
+    text-align: center;
+    font-size: 30px;
+    color: white;
+    margin: -10px 0px 0px 0px;
+    height: 150px;
+  }
+
+  header nav{
+    background-color: black;
+    float: right;
+    font-size: small;
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  
+  /* Create two columns/boxes that floats next to each other */
+  .LHSnav {
+    float: left;
+    width: 30%;
+    height: 540px; /* only for demonstration, should be removed */
+    background: rgba(10, 82, 189, 0.651);
+    padding: 20px;
+  }
+  
+  /* Style the list inside the menu */
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  article {
+    float: left;
+    padding: 20px;
+    width: 70%;
+    background-color: #ffffff;
+    height: 520px; /* only for demonstration, should be removed */
+    /*overflow-y: scroll;*/ 
+  }
+  
+  /* Clear floats after the columns */
+  section::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  /* Style the footer */
+  footer {
+    background-color: rgb(8, 4, 29);
+    padding: 10px;
+    text-align: center;
+    color: white;
+  }
+
+  .LHSbutton{
+    display: block;
+    width: 100%;
+    padding: 15px 20px;
+    text-align: center;
+    border: none;
+    background: #3f36c0;
+    outline: none;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    color: #FFF;
+    cursor: pointer;
+    transition: .3s;
+  }
+
+  .LHSbutton:hover{
+    transform: translateY(-5px);
+    background: #6c5ce7;
+  }
+  
+  /* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+  @media (max-width: 600px) {
+    nav, article {
+      width: 100%;
+      height: auto;
+    }
+    .LHSnav{
+      width: 100%;
+      margin-bottom: -200px;
+    }
+    h1{
+      width: 100%;
+    }
+  }
