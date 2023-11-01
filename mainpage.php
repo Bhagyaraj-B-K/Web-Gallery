@@ -17,13 +17,35 @@ if (!isset($_SESSION['username'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Web Gallery</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="styles/styles2.css">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+  <title>Web Gallery</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="styles/styles2.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+
+  <!-- photoviewer plugins -->
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link href="plugins/photoviewer/photoviewer.css" rel="stylesheet">
+  <style>
+    .photoviewer-modal {
+      background-color: black;
+      color: white;
+    }
+    .photoviewer-stage {
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    bottom: 40px;
+    left: 10px;
+    z-index: 1;
+    /* border: 1px solid #ccc; */
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, .85);
+}
+  </style>
 </head>
 <body>
 <header>
@@ -64,6 +86,7 @@ if (!isset($_SESSION['username'])) {
                 $image = addslashes(file_get_contents($_FILES['f1']['tmp_name']));
                 $imagesize = $_FILES['f1']['size'];
                 $imagetype = $_FILES['f1']['type'];
+                $imageName = $_FILES['f1']['name'];
                 if($imagetype!= "image/gif" && $imagetype!= "image/png" && $imagetype!= "image/jpeg" && $imagetype!= "image/JPEG" && $imagetype!= "image/PNG" && $imagetype!= "image/GIF"){
                   $_SESSION['typecheck']= 1;
                   header("Location: mainpage.php");
@@ -78,7 +101,7 @@ if (!isset($_SESSION['username'])) {
                 $_SESSION['data'] = $totalsize;
                 if($totalsize<500000000 && $_FILES['f1']['name'])
                 {
-                    $query1= "insert into images values('','$email','$image','$imagesize')";
+                    $query1= "insert into images values('','$email','$image','$imageName','$imagesize')";
                     $query2= "update users set data='$totalsize' where email='$email'";
                     mysqli_query($conn,$query1);
                     mysqli_query($conn,$query2);
@@ -95,16 +118,15 @@ if (!isset($_SESSION['username'])) {
             {
                 $query= "select * from images where email='$email'";
                 $res=mysqli_query($conn,$query);
-                
+                $photoviewerIndex = 0;
                 while($row=mysqli_fetch_array($res))
                 {
                 echo "<div style='float: left; margin: 7px; background-color: rgba(10, 82, 189, 0.651); padding: 5px; border-radius:10px;'>"; 
-                echo '<img style="border-radius:5px; padding: 3px; background-color: black;" src="data:image/jpeg;base64,'.base64_encode($row['image'] ).'" height="200" width="200"/>';
+                echo '<a data-gallery="photoviewer" data-title="'.$row['image_name'].'" data-group="a" index='.$photoviewerIndex++.'
+                href="data:image/jpeg;base64,'.base64_encode($row['image'] ).'"><img style="border-radius:5px; padding: 3px; background-color: black;" src="data:image/jpeg;base64,'.base64_encode($row['image'] ).'" height="200" width="200"/></a>';
                 echo "<br>";
                 ?><a style="color:white; float:right; background-color:black; padding:5px; border-radius:10px;" href="delete.php?id=<?php echo $row["id"]; ?>">Delete</a> <?php
                 echo "</div>";
-            
-            
             
                 }
             
@@ -116,6 +138,34 @@ if (!isset($_SESSION['username'])) {
     
   </article>
 </section>
+
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="plugins/photoviewer/photoviewer.js"></script>
+<script>
+    // initialize manually with a list of links
+    $('[data-gallery=photoviewer]').click(function (e) {
+
+      e.preventDefault();
+
+      var items = [],
+        options = {
+          index: parseInt($(this).attr('index')),
+        };
+
+      $('[data-gallery=photoviewer]').each(function () {
+        items.push({
+          src: $(this).attr('href'),
+          title: $(this).attr('data-title')
+        });
+      });
+
+      console.log(items);
+      console.log("options:", options);
+      new PhotoViewer(items, options);
+
+    });
+</script>
 
 <footer>
   <p><a href="https://github.com/Bhagyaraj-B-K" style="text-decoration:none; color:white"><i class="fa fa-github"></i> Bhagyaraj-B-K</p>

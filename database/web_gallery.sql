@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 01, 2023 at 01:36 PM
+-- Generation Time: Nov 01, 2023 at 04:49 PM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -31,6 +31,7 @@ CREATE TABLE `images` (
   `id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
   `image` longblob NOT NULL,
+  `image_name` varchar(500) NOT NULL,
   `size` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
